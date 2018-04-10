@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link  href="./css/style.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div style="text-align:center;clear:both">
+</div>
+<div id="container">
+    <ul id="menu">
+        <li><a href="#">threejs积木练手</a>
+            <ul>
+                <li><a href="#">还是threejs积木练手</a></li>
+            </ul>
+        </li>
+        <li><a href="#">添加几何体</a>
+            <ul>
+                <li><a href="#" onclick="method(1)">正方体</a></li>
+                <li><a href="#" onclick="method(3)"> 长方体</a></li>
+                <li><a href="#" onclick="method(2)">波体</a></li>
+                <li><a href="#" onclick="method(4)">圆柱体</a></li>
+            </ul>
+        </li>
+        <li><a href="#">提示</a>
+            <ul>
+                <li><a href="#">滚轮移动焦距远近</a></li>
+                <li><a href="#">按住鼠标左键旋转场景</a></li>
+                <li><a href="#">按住鼠标右键拖拉场景</a></li>
+                <li><a href="#">按住CTRL再按左键可以删除几何体</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<div id="all">
+
+</div>
+
+
+</body>
+<script src="js/three.js"></script>、
+<script src="js/main.js"></script>
+<script src="js/TrackballControls.js"></script>
+<script>
+
+    var controls;
+    controls = new THREE.TrackballControls( camera, renderer.domElement );
+      console.log(controls)
+    function animate() {
+        requestAnimationFrame(animate,renderer.domElement);
+        controls.update();
+        renderer.render(scene,camera );
+    }
+    animate();
+</script>
+
+
