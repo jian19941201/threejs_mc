@@ -48,10 +48,14 @@ function init() {
     scene.add(plane);
     objects.push(plane);
     createLights();
-    renderer = new THREE.WebGLRenderer({antialias: true});//生成渲染器对象，锯齿效果为true
+    renderer = new THREE.WebGLRenderer({
+        // 在 css 中设置背景色透明显示渐变色
+        alpha: true,
+        //生成渲染器对象，锯齿效果为true
+        antialias: true});
     renderer.shadowMap.enabled = true;
-    renderer.setClearColor(0xf0f0f0);
-    renderer.setPixelRatio(window.devicePixelRatio);
+    //renderer.setClearColor(0xf0f0f0);
+    //renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth-80, window.innerHeight-80);
     container = document.getElementById('all');//使用createElement创建一个div，就是整个页面
     container.appendChild(renderer.domElement);
