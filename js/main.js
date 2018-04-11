@@ -100,6 +100,7 @@ function method(a) {
     }
 }
 function methodfollow(rollOverGeo) {
+    scene.remove(rollOverMesh);//清空上次留下跟随的几何体
     // 这个几何对象是鼠标在移动时候，跟随鼠标显示的几何对象
     rollOverMaterial = new THREE.MeshBasicMaterial({color: 0xff0000, opacity: 0.5, transparent: true});
     //创建一个色彩为红色的材料，透明度为半透明
