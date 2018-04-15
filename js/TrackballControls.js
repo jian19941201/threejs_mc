@@ -398,6 +398,7 @@ THREE.TrackballControls = function ( object, domElement ) {
     }
 
     function mousedown( event ) {
+             console.log('tr1')
         if ( _this.enabled === false ) return;
 
         event.preventDefault();
@@ -408,7 +409,6 @@ THREE.TrackballControls = function ( object, domElement ) {
             _state = event.button;
 
         }
-
         if ( _state === STATE.ROTATE && !_this.noRotate ) {
 
             _rotateStart.copy( getMouseProjectionOnBall( event.pageX, event.pageY ) );
@@ -425,31 +425,6 @@ THREE.TrackballControls = function ( object, domElement ) {
             _panEnd.copy(_panStart)
 
         }
-        event.preventDefault();
-        mouse.set((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1);
-        raycaster.setFromCamera(mouse, camera);
-        var intersects = raycaster.intersectObjects(objects);
-        if (intersects.length > 0) {
-            var intersect = intersects[0];
-            // delete cube
-            if (isctrl) {
-                if (intersect.object != plane) {
-                    scene.remove(intersect.object);
-                    objects.splice(objects.indexOf(intersect.object), 1);
-                }
-                // create cube
-            } else {
-                var voxel = new THREE.Mesh(cubeGeo, cubeMaterial);
-                voxel.position.copy(intersect.point).add(intersect.face.normal);
-                voxel.position.divideScalar(50).floor().multiplyScalar(50).addScalar(25);
-                voxel.castShadow=true;
-                voxel.receiveShadow=true;
-                scene.add(voxel);
-                objects.push(voxel);
-            }
-            render();
-        }
-
         document.addEventListener( 'mousemove', mousemove, false );
         document.addEventListener( 'mouseup', mouseup, false );
 
@@ -496,7 +471,7 @@ THREE.TrackballControls = function ( object, domElement ) {
     }
 
     function mousewheel( event ) {
-
+       console.log('TRwheel')
         if ( _this.enabled === false ) return;
 
         event.preventDefault();
@@ -515,6 +490,9 @@ THREE.TrackballControls = function ( object, domElement ) {
         }
 
         _zoomStart.y += delta * 0.01;
+        camera.zoom = Math.max(camera.minZoom, Math.min(camera.maxZoom, camera.zoom / delta));
+        console.log(camera.zoom)
+        camera.updateProjectionMatrix();
         _this.dispatchEvent( startEvent );
         _this.dispatchEvent( endEvent );
 
@@ -578,7 +556,6 @@ THREE.TrackballControls = function ( object, domElement ) {
 
             default:
                 _state = STATE.NONE;
-
         }
 
     }

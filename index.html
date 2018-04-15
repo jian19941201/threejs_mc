@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link  href="./css/style.css">
+    <link href="./css/style.css">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
@@ -13,7 +13,7 @@
     <ul id="menu">
         <li><a href="#">threejs积木练手</a>
             <ul>
-                <li><a href="#">还是threejs积木练手</a></li>
+                <li><a href="#" onclick="switchcamera()">切换摄像机</a></li>
             </ul>
         </li>
         <li><a href="#">添加几何体</a>
@@ -35,29 +35,61 @@
     </ul>
 </div>
 
-<div id="all"  style=" width: 100%;
+<div id="all" style=" width: 100%;
      height: 100%;
      overflow: hidden;
      background: linear-gradient(#b5e4bf, #f7c258);;">
 
 </div>
 
-
 </body>
-<script src="js/three.js"></script>、
+<script src="js/vendor/jquery-3.2.1.min.js"></script>
+<script src="js/three.js"></script>
 <script src="js/main.js"></script>
+<script src="js/OrbitControls.js"></script>
 <script src="js/TrackballControls.js"></script>
 <script>
-
     var controls;
-    controls = new THREE.TrackballControls( camera, renderer.domElement );
-      console.log(controls)
-    function animate() {
-        requestAnimationFrame(animate,renderer.domElement);
-        controls.update();
-        renderer.render(scene,camera );
+    function Orbit(orcamera) {
+        if(orcamera!=null){
+           // controls.camera=orcamera;
+            //console.log(orcamera);
+            controls.object=orcamera;
+            console.log(controls);
+        }
+        else{
+            controls = new THREE.OrbitControls(camera,renderer.domElement);
+            controls.minDistance = 0;
+            controls.maxDistance = Infinity;
+            // 如果使用animate方法时，将此函数删除
+            //controls.addEventListener( 'change', render );
+            // 使动画循环使用时阻尼或自转 意思是否有惯性
+            controls.enableDamping = true;
+            //动态阻尼系数 就是鼠标拖拽旋转灵敏度
+            //controls.dampingFactor = 0.25;
+            //是否可以缩放
+            controls.enableZoom = true;
+            //是否自动旋转
+            //controls.autoRotate = true;
+            //设置相机距离原点的最远距离
+            controls.minDistance = 200;
+            //设置相机距离原点的最远距离
+            controls.maxDistance = 600;
+            //是否开启右键拖拽
+            controls.enablePan = true;
+        }
     }
+    function sddf() {
+        controls = new THREE.TrackballControls(camera, renderer.domElement);
+        console.log(controls);
+    };
+    function animate() {
+        //更新控制器
+        controls.update();
+        render();
+        requestAnimationFrame(animate);
+    }
+
+    Orbit();
     animate();
 </script>
-
-

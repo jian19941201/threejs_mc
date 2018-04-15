@@ -1,7 +1,7 @@
 var container, rollOverGeo;
 var camera, scene, renderer;
-var plane, cube ;
-var mouse, raycaster, isShiftDown = false,isctrl=false;
+var plane, cube;
+var mouse, raycaster, isShiftDown = false, isctrl = false;
 
 var rollOverMesh, rollOverMaterial;
 var cubeGeo, cubeMaterial;
@@ -11,11 +11,13 @@ var objects = [];
 init();
 render();//渲染
 
-
 function init() {
-
+    // camera = new THREE.OrthographicCamera(window.innerWidth/-14.5,window.innerWidth/14.5,
+    //     window.innerHeight/14.5,window.innerHeight/-14.5,-10000,10000);
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);//设置透视投影的相机
     camera.position.set(500, 800, 1300);//设置相机坐标
+    // camera.zoom=0.2;
+    // camera.updateProjectionMatrix ();
     camera.lookAt(new THREE.Vector3());//设置视野的中心坐标
     scene = new THREE.Scene();//设置场景,场景是一个三维空间，用Scene类声明一个对象
 
@@ -40,11 +42,12 @@ function init() {
     mouse = new THREE.Vector2();
     var geometry = new THREE.PlaneBufferGeometry(2000, 2000);
     geometry.rotateX(-Math.PI / 2);
-    geometry.receiveShadow=true;
-    plane = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({visible: false,
-        shading:THREE.FlatShading
+    geometry.receiveShadow = true;
+    plane = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+        visible: false,
+        shading: THREE.FlatShading
     }));
-    plane.receiveShadow=true;
+    plane.receiveShadow = true;
     scene.add(plane);
     objects.push(plane);
     createLights();
@@ -52,22 +55,25 @@ function init() {
         // 在 css 中设置背景色透明显示渐变色
         alpha: true,
         //生成渲染器对象，锯齿效果为true
-        antialias: true});
+        antialias: true
+    });
     renderer.shadowMap.enabled = true;
     //renderer.setClearColor(0xf0f0f0);
     //renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth-80, window.innerHeight-80);
+    renderer.setSize(window.innerWidth - 80, window.innerHeight - 80);
     container = document.getElementById('all');//使用createElement创建一个div，就是整个页面
     container.appendChild(renderer.domElement);
     document.addEventListener('mousemove', onDocumentMouseMove, false);//鼠标移动事件
-   // document.addEventListener('mousedown', onDocumentMouseDown, false);//鼠标点击事件
+    // document.addEventListener('mousedown', onDocumentMouseDown, false);//鼠标点击事件
     document.addEventListener('keydown', onDocumentKeyDown, false);//对shift按键的控制
     document.addEventListener('keyup', onDocumentKeyUp, false);//对shift按键的控制
     window.addEventListener('resize', onWindowResize, false);//窗口改变事件
 }
+
 function render() {
     renderer.render(scene, camera);
 }
+
 function method(a) {
     switch (a) {
         case 1:
@@ -103,6 +109,7 @@ function method(a) {
 
     }
 }
+
 function methodfollow(rollOverGeo) {
     scene.remove(rollOverMesh);//清空上次留下跟随的几何体
     // 这个几何对象是鼠标在移动时候，跟随鼠标显示的几何对象
@@ -166,32 +173,32 @@ function onDocumentMouseMove(event) {
 //     }
 // }
 
-    function onWindowResize() {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    }
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+}
 
-    function onDocumentKeyDown(event) {
-        switch (event.keyCode) {
-            case 16:
-                isShiftDown = true;
-                break;
-            case 17:
-                isctrl = true;
-                break;
-        }
+function onDocumentKeyDown(event) {
+    switch (event.keyCode) {
+        case 16:
+            isShiftDown = true;
+            break;
+        case 17:
+            isctrl = true;
+            break;
     }
+}
 
-    function onDocumentKeyUp(event) {
-        switch (event.keyCode) {
-            case 16:
-                isShiftDown = false;
-                break;
-            case 17:
-                isctrl = false;
-                break;
-        }
+function onDocumentKeyUp(event) {
+    switch (event.keyCode) {
+        case 16:
+            isShiftDown = false;
+            break;
+        case 17:
+            isctrl = false;
+            break;
+    }
 
 }
 
@@ -200,7 +207,7 @@ function createLights() {
 
     // 半球光就是渐变的光；
     // 第一个参数是天空的颜色，第二个参数是地上的颜色（光照会影响地上颜色  有坑），第三个参数是光源的强度
-    hemisphereLight = new THREE.HemisphereLight(0xaaaaaa,0x000000, .9);
+    hemisphereLight = new THREE.HemisphereLight(0xaaaaaa, 0x000000, .9);
 
     // 环境光源修改场景中的全局颜色和使阴影更加柔和
     abc = new THREE.AmbientLight(0xdc8874, .5);
@@ -234,3 +241,26 @@ function createLights() {
     scene.add(hemisphereLight);
     scene.add(shadowLight);
 }
+
+function switchcamera() {
+    if (camera instanceof THREE.PerspectiveCamera) {
+        camera = new THREE.OrthographicCamera(window.innerWidth / -14.5, window.innerWidth / 14.5, window.innerHeight / 14.5, window.innerHeight / -14.5, -10000, 10000);
+        camera.position.set(500, 800, 1300);//设置相机坐标
+        camera.zoom = 0.1;
+        camera.updateProjectionMatrix();
+        camera.lookAt(scene.position);
+        camera.perspective = "Orthographic";
+        console.log(camera.perspective);
+         Orbit(camera);//  camera已改变   重新实例OrbitControls对象
+        //animate();
+    } else {
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);//设置透视投影的相机
+        camera.position.set(500, 800, 1300);//设置相机坐标
+        camera.lookAt(scene.position);
+        camera.perspective = "Perspective";
+        console.log(camera.perspective);
+        Orbit(camera);
+        //animate();
+    }
+}
+
